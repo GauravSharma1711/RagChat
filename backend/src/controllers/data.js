@@ -27,11 +27,12 @@ export const text = async (req, res) => {
 export const url = async (req, res) => {
   try {
     const { url } = req.body;
+   
+  
     if (!url) return res.status(400).json({ error: "URL is required" });
 
-    webIndexing(url);
+   await webIndexing(url);
 
-    await chat({ collectionName: "web-data", question: "", textData: "" });
 
     res.status(200).json({ message: "URL received successfully", url });
 
@@ -46,9 +47,8 @@ export const pdf = async (req, res) => {
     console.log("File info:", req.file);
     if (!req.file) return res.status(400).json({ error: "No PDF uploaded" });
 
-    pdfIndexing();
+   await pdfIndexing();
 
-    await chat({ collectionName: "doc-chat", question: "", textData: "" });
 
     res.status(200).json({
       message: "PDF uploaded successfully",
@@ -76,7 +76,7 @@ export const chatController = async (req, res) => {
 
   const answer =  type.toString() == "pdf"?
    await docChat(question) :
-     ( type.toString() == "web" ? await webChat(question): await textfun(question) );
+     ( type.toString() == "url" ? await webChat(question): await textfun(question) );
 
 
 

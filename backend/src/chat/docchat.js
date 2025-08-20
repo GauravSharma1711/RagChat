@@ -24,7 +24,6 @@ async function docChat(question) {
 
   Context:
   ${JSON.stringify(relevantChunks)}
-  ${textData}
   `;
 
   const response = await client.chat.completions.create({

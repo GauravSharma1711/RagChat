@@ -24,7 +24,7 @@ async function webChat(question) {
 
   Context:
   ${JSON.stringify(relevantChunks)}
-  ${textData}
+ 
   `;
 
   const response = await client.chat.completions.create({
