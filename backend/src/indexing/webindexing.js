@@ -8,9 +8,9 @@ import { QdrantVectorStore } from "@langchain/qdrant";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 
-async function init(){
+async function webIndexing(url){
 
-    const loader = new CheerioWebBaseLoader("https://js.langchain.com/");
+    const loader = new CheerioWebBaseLoader(url);
       const docs = await loader.load();
 
         const splitter = new RecursiveCharacterTextSplitter({
@@ -21,7 +21,7 @@ async function init(){
  const splitDocs = await splitter.splitDocuments(docs);
 
 const embeddings = new OpenAIEmbeddings({
-  model: "text-embedding-3-small"
+  model: "text-embedding-3-large"
 });
 
 const vectorStore = await QdrantVectorStore.fromDocuments(
@@ -35,4 +35,4 @@ const vectorStore = await QdrantVectorStore.fromDocuments(
 
 }
 
-init()
+export default webIndexing;

@@ -12,9 +12,9 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadPath); // store in src/uploads
   },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
+ filename: (req, file, cb) => {
+  cb(null, "pdfName" + path.extname(file.originalname));
+}
 });
 
 const fileFilter = (req, file, cb) => {

@@ -1,17 +1,19 @@
 import 'dotenv/config';
+import path from 'path';
 
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { QdrantVectorStore } from "@langchain/qdrant";
 
-async function init(){
-const pdfFilePath = './resume_gaurav_sharma_1.pdf'
+async function pdfIndexing(){
+const pdfFilePath = path.join(process.cwd(), 'src', 'uploads', 'pdfName.pdf'); 
+
 const loader = new PDFLoader(pdfFilePath);
 
 const docs = await loader.load();
 
 const embeddings = new OpenAIEmbeddings({
-  model: "text-embedding-3-small"
+  model: "text-embedding-3-large"
 });
 
 const vectorStore = await QdrantVectorStore.fromDocuments(
@@ -25,4 +27,4 @@ const vectorStore = await QdrantVectorStore.fromDocuments(
 
 }
 
-init()
+export default pdfIndexing
