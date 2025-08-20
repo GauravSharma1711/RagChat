@@ -1,14 +1,17 @@
 import React from 'react';
 import { useState } from 'react';
 import dataStore from '../store/datastore.js';
+import useMessageStore from '../store/messageStore.js';
 
 const Text = () => {
   const {textFun} = dataStore();
   const [text, setText] = useState('')
+const { setType } = useMessageStore();
 
   const handleTextBtnClick = ()=>{
     try {
       textFun({text})
+        setType('text');
       setText('');
     } catch (error) {
       console.log(error);

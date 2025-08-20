@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import dataStore from '../store/datastore.js';
+import useMessageStore from '../store/messageStore.js';
 
 const Url = () => {
   const { urlFun } = dataStore();
   const [url, setUrl] = useState('');
+const { setType } = useMessageStore();
 
   // ✅ Declare properly with const
   const handleUrlBtnClick = () => {
     try {
       urlFun(url);
+        setType('url');
       setUrl('')
     } catch (error) {
       console.error(error);

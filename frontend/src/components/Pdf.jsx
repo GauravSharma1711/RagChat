@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import dataStore from '../store/datastore.js';
+import useMessageStore from '../store/messageStore.js';
 
 const Pdf = () => {
   const { pdfFun } = dataStore(); // ✅ get function from store
   const [selectedFile, setSelectedFile] = useState(null);
+const { setType } = useMessageStore();
 
   // Handler for file input change
   const handleFileChange = (event) => {
@@ -22,6 +24,7 @@ const Pdf = () => {
       try {
         console.log('Uploading file:', selectedFile.name);
         await pdfFun(selectedFile); 
+        setType('pdf');
         setSelectedFile(null);
       } catch (error) {
         console.error("Upload failed:", error);

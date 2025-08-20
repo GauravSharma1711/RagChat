@@ -1,58 +1,57 @@
 import React, { useState } from 'react';
+import useMessageStore from '../store/messageStore.js';
 
 const ChatInterface = () => {
-  // State to store chat messages
-  const [messages, setMessages] = useState([
-    { text: "Hello! How can I help you today?", sender: 'bot' },
-    { text: "I'm looking for some information on the RAG model.", sender: 'user' },
-  ]);
-  // State to store the current user input
+  const { messages, getAnswer, clear } = useMessageStore();
   const [input, setInput] = useState('');
 
-  // Function to handle sending a new message
-  const handleSendMessage = () => {
-    if (input.trim() !== '') {
-      // Add the user's message to the messages array
-      const newUserMessage = { text: input, sender: 'user' };
-      setMessages([...messages, newUserMessage]);
-      // Clear the input field
-      setInput('');
 
-      // Simulate a bot response after a short delay
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: "Interesting! The RAG model combines retrieval and generation.", sender: 'bot' },
-        ]);
-      }, 1000);
-    }
+  const handleSendMessage = async () => {
+    if (input.trim() === '') return;
+
+    // Call the store function to handle sending the message & fetching answer
+    await getAnswer(input);
+    setInput('');
   };
 
   return (
-    // Main container for the chat interface. It fills the remaining space,
-    // has a clean background, and is structured as a column.
     <div className="flex flex-col flex-1 h-full bg-gray-50 dark:bg-gray-900">
       
       {/* Chat Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 shadow-sm p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
           AI Assistant
         </h2>
+        <button
+          onClick={clear}
+          className="btn btn-sm btn-error"
+        >
+          Clear
+        </button>
       </div>
 
       {/* Chat Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.map((msg, index) => (
-          // Message bubble container, aligned left for 'bot' and right for 'user'.
           <div
             key={index}
-            className={`chat ${msg.sender === 'user' ? 'chat-end' : 'chat-start'}`}
+            className={`chat ${msg.myQuestion ? 'chat-end' : 'chat-start'}`}
           >
-            <div className="chat-bubble break-words">
-              {msg.text}
+            <div
+              className={`chat-bubble break-words ${
+                msg.isLoading ? 'loading' : ''
+              }`}
+            >
+
+              {msg.isLoading
+    ? '...'
+    : typeof msg.answer === 'string'
+      ? msg.answer
+      : JSON.stringify(msg.answer)}
             </div>
           </div>
         ))}
+
       </div>
 
       {/* Input area */}
@@ -72,7 +71,6 @@ const ChatInterface = () => {
           Send
         </button>
       </div>
-
     </div>
   );
 };
