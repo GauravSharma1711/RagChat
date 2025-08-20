@@ -8,9 +8,9 @@ const Text = () => {
   const [text, setText] = useState('')
 const { setType } = useMessageStore();
 
-  const handleTextBtnClick = ()=>{
+  const handleTextBtnClick = async()=>{
     try {
-      textFun({text})
+   await   textFun({text})
         setType('text');
       setText('');
     } catch (error) {

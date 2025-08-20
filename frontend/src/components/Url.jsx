@@ -8,9 +8,9 @@ const Url = () => {
 const { setType } = useMessageStore();
 
   // ✅ Declare properly with const
-  const handleUrlBtnClick = () => {
+  const handleUrlBtnClick = async () => {
     try {
-      urlFun(url);
+     await urlFun(url);
         setType('url');
       setUrl('')
     } catch (error) {
